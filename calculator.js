@@ -63,18 +63,22 @@ const handleFormSubmit = (e) => {
   tipTotalPerPerson.innerText = `$` + tipPerPerson.toFixed(2);
 
   resetButton.removeAttribute(`disabled`);
+  // History
+  historyNotAvailableMessage.classList.add("hide");
+  historyTable.classList.remove("hide");
 
   displayHistoryTable();
+  const lastHistoryItem = Date.now();
 
   history.push({
-    id: generateHistoryId(),
+    id: lastHistoryItem,
     bill: amount,
-    tip: selectedTip,
+    tip: Number(selectedTip),
     numberOfPeople: numberOfPeople,
   });
 
   //statistics
-  createHistoryRow();
+  createHistoryRow(amount, numberOfPeople, lastHistoryItem);
   updateAverageBill();
   updateAverageTip();
   theMostExpensive();
@@ -140,12 +144,3 @@ const handleResetForm = () => {
 
 resetButton.addEventListener("click", handleResetForm);
 // the most expensive//
-const theMostExpensive = () => {
-  let price = 0;
-  for (let i = 0; i < history.length; i++) {
-    if (history[i].bill > price) {
-      price = history[i].bill;
-    }
-  }
-  averageExpensive.innerText = "$" + price;
-};

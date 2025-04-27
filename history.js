@@ -6,18 +6,16 @@ const historyTableBody = historyTable.querySelector(`tbody`);
 
 let history = [];
 
-const createHistoryRow = () => {
-  const lastHistoryItem = history[history.length - 1];
-
+const createHistoryRow = (bill, numberOfPeople, lastHistoryItem) => {
   const newHistoryElement = document.createElement(`tr`);
-  newHistoryElement.setAttribute("date-id", lastHistoryItem.id);
+  newHistoryElement.setAttribute("date-id", lastHistoryItem);
   newHistoryElement.innerHTML = `
-      <td>${lastHistoryItem.bill} </td>
-      <td>${lastHistoryItem.tip}%</td>
-      <td>${lastHistoryItem.numberOfPeople}</td>
+      <td>${bill} </td>
+      <td>${selectedTip}%</td>
+      <td>${numberOfPeople}</td>
       <td>${getFormattedDate()} </td>
       <td> 
-        <button class="delete-button">
+        <button class="delete-button" data-id="${lastHistoryItem}">
             <img src="./assets/delete.svg" />
         </button>
       </td>
@@ -32,21 +30,13 @@ const createHistoryRow = () => {
     const userConfirmed = confirm("Are you sure? This action is irreversible.");
 
     if (userConfirmed === true) {
-      history.splice(lastHistoryItem, 1);
+      history = history.filter((element) => element.id !== lastHistoryItem);
       historyTableBody.removeChild(newHistoryElement);
+      updateAverageBill();
+      updateAverageTip();
+      theMostExpensive();
     }
-    const tableRow = deleteButton.parentElement.parentElement;
-    const tableRowId = Number(tableRow.getAttribute("data-id"));
-
-    history = history.filter((element) => element.id !== tableRowId);
-
-    // la atributul find trebuie folosit un arrow function in el
-
-    updateAverageBill();
-    updateAverageTip();
-    theMostExpensive(averageExpensive);
   };
-
   deleteButton.addEventListener("click", handleDeleteHistoryRow);
 };
 

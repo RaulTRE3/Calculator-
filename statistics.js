@@ -24,6 +24,15 @@ const updateAverageTip = () => {
     sum += tipValue;
   }
   const averageTip = sum / history.length;
-  console.log("Test");
   averageTipElement.innerText = `$` + averageTip.toFixed(2);
+};
+
+const theMostExpensive = () => {
+  let price = 0;
+  for (let i = 0; i < history.length; i++) {
+    if (history[i].bill > price) {
+      price = history[i].bill;
+    }
+  }
+  averageExpensive.innerText = "$" + price;
 };
